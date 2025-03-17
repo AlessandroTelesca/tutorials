@@ -9,6 +9,9 @@ import numpy as np
 
 # TODO Loading images in grey and color
 
+grayScaleImage = cv2.imread("./tutorials/data/images/Bumbu_Rawon.jpg", cv2.IMREAD_GRAYSCALE)
+colorImage = cv2.imread("./tutorials/data/images/Bumbu_Rawon.jpg", cv2.IMREAD_COLOR)
+
 # TODO Do some print out about the loaded data using type, dtype and shape
 
 # TODO Continue with the grayscale image

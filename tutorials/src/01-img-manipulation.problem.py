@@ -3,11 +3,11 @@
 #
 # Load, resize and rotate an image. And display it to the screen.
 
-# TODO First step is to import the opencv module which is called 'cv2'
+#  First step is to import the opencv module which is called 'cv2'
 
-# TODO Check the opencv version
+#  Check the opencv version
 
-# TODO Load an image with image reading modes using 'imread'
+#  Load an image with image reading modes using 'imread'
 # cv2.IMREAD_UNCHANGED  - If set, return the loaded image as is (with alpha
 #                         channel, otherwise it gets cropped). Ignore EXIF
 #                         orientation.
@@ -16,10 +16,29 @@
 # cv2.IMREAD_COLOR      - If set, always convert image to the 3 channel BGR
 #                         color image.
 
-# TODO Resize image with 'resize'
+#  Resize image with 'resize'
 
-# TODO Rotate image (but keep it rectangular) with 'rotate'
+#  Rotate image (but keep it rectangular) with 'rotate'
 
-# TODO Save image with 'imwrite'
+#  Save image with 'imwrite'
 
-# TODO Show the image with 'imshow'
+#  Show the image with 'imshow'
+
+import cv2
+
+print(cv2.__version__)
+
+image = cv2.imread("./tutorials/data/images/blobtest.jpg", cv2.IMREAD_COLOR)
+
+newHeight = 300
+newWidth = 1800
+newSize = (newWidth, newHeight)
+img = cv2.resize(image, newSize)
+
+image = cv2.rotate(image, cv2.ROTATE_180)
+
+cv2.imwrite("tutorial01Image.jpg", image)
+
+cv2.imshow("tutorial 01", image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
