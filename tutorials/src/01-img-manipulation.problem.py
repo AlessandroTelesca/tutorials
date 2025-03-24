@@ -33,12 +33,14 @@ image = cv2.imread("./tutorials/data/images/blobtest.jpg", cv2.IMREAD_COLOR)
 newHeight = 300
 newWidth = 1800
 newSize = (newWidth, newHeight)
-img = cv2.resize(image, newSize)
+image = cv2.resize(image, newSize)
 
 image = cv2.rotate(image, cv2.ROTATE_180)
 
 cv2.imwrite("tutorial01Image.jpg", image)
 
-cv2.imshow("tutorial 01", image)
+title = "OpenCV Python Tutorial"
+cv2.namedWindow(title, cv2.WINDOW_GUI_EXPANDED)
+cv2.imshow(title, image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

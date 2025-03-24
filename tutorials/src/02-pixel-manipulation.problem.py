@@ -7,36 +7,65 @@
 import cv2
 import numpy as np
 
-# TODO Loading images in grey and color
-
+# Loading images in grey and color
 grayScaleImage = cv2.imread("./tutorials/data/images/Bumbu_Rawon.jpg", cv2.IMREAD_GRAYSCALE)
 colorImage = cv2.imread("./tutorials/data/images/Bumbu_Rawon.jpg", cv2.IMREAD_COLOR)
 
-# TODO Do some print out about the loaded data using type, dtype and shape
+# Do some print out about the loaded data using type, dtype and shape
+print("Color image type:" , type(colorImage) , "Grayscale image type:" , type(grayScaleImage))
+print("Color image dtype:" , colorImage.dtype , "Grayscale image dtype:" , grayScaleImage.dtype)
+print("Color image shape:" , colorImage.shape , "Grayscale image shape:" , grayScaleImage.shape)
 
-# TODO Continue with the grayscale image
+# Extract the size or resolution of the image
+height, width, channels = colorImage.shape
+print("Height:", height, "Width:", width, "Channels:", channels)
 
-# TODO Extract the size or resolution of the image
-
-# TODO Resize image
+# Resize image
+newWidth = 30
+newHeight = 20
+newSize = (newWidth, newHeight)
+resizedImage = cv2.resize(grayScaleImage, newSize)
+heightres, widthres = resizedImage.shape
+print("Height:", heightres, "Width:", widthres)
 
 # Row and column access, see https://numpy.org/doc/stable/reference/arrays.ndarray.html for general access on ndarrays
-# TODO Print first row
+# Print first row
+# print("print first row" , grayScaleImage[:,1])
 
-# TODO Print first column
+# Print first column
+# print("print first column" , grayScaleImage[1,:])
 
-# TODO Continue with the color image
+# Continue with the color image
 
-# TODO Set an area of the image to black
+#  Set an area of the image to black
+colorImage[100:200, 300:400] = 0
 
-# TODO Show the image and wait until key pressed
+# Show the image and wait until key pressed
 
-# TODO Find all used colors in the image
+# Find all used colors in the image
+# print("Used colors in the image", colorImage[:,:])
 
-# TODO Copy one part of an image into another one
+# Copy one part of an image into another one
+maxheight, maxwidth, channels = colorImage.shape
 
-# TODO Save image to a file
+onion = colorImage[0:100, 100:200]
+colorImage[maxheight-100:maxheight, maxwidth-100:maxwidth] = onion
 
-# TODO Show the image again
+# Save image to a file
 
-# TODO Show the original image (copy demo)
+#  Show the image again
+#show color image
+cv2.namedWindow("Color", cv2.WINDOW_GUI_NORMAL)
+imshow = cv2.imshow("Color", colorImage)
+
+#show gray image
+cv2.namedWindow("Gray", cv2.WINDOW_GUI_NORMAL)
+imshow = cv2.imshow("Gray", grayScaleImage) 
+
+# show resized image
+cv2.namedWindow("Resized", cv2.WINDOW_GUI_NORMAL)
+imshow = cv2.imshow("Resized", resizedImage)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+# Show the original image (copy demo)
