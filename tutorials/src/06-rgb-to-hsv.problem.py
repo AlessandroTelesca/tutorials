@@ -40,17 +40,20 @@ font_size_small = 1
 font_size_smaller = 0.6
 font = cv2.FONT_HERSHEY_SIMPLEX
 
-# TODO Define  RGB colors as variables
+# Define  RGB colors as variables
+red = (0, 0, 255)
+green = (0, 255, 0)
+blue = (255, 0, 0)
 
 # Exemplary color conversion (only for the class), tests usage of cv2.cvtColor
 
-# TODO Enter some default values and uncomment
-# hue =
+# Enter some default values and uncomment
+hue = 10
 hue_range = 10
-# saturation =
-saturation_range = 100
-# value =
-value_range = 100
+saturation = 100
+saturation_range = 50
+value = 100
+value_range = 50
 
 
 # Callback to pick the color on double click
@@ -64,6 +67,17 @@ def color_picker(event, x, y, flags, param):
         print("New color selected:", (hue, saturation, value))
 
 
+originalImageTitle = "Original image"
+cv2.namedWindow(originalImageTitle)
+cv2.setMouseCallback(originalImageTitle, color_picker)
+
+maskImageTitle = "Mask image"
+cv2.namedWindow(maskImageTitle)
+
+maskedImageTitle = "Masked image"
+cv2.namedWindow(maskedImageTitle)
+
+
 while True:
     # Get video frame (always BGR format!)
     ret, frame = cap.read()
@@ -71,25 +85,56 @@ while True:
         # Copy image to draw on
         img = frame.copy()
 
-        # TODO Compute color ranges for display
+        # Compute color ranges for display
+        lower_blue = np.array([hue - hue_range, saturation - saturation_range, value - value_range])
+        upper_blue = np.array([hue + hue_range, saturation + saturation_range, value + value_range])
 
-        # TODO Draw selection color circle and text for HSV values
+        # Draw selection color circle and text for HSV values
+        hsvSelectedPixel = np.zeros((1, 1, 3), np.uint8)
+        hsvSelectedPixel[0, 0] = (hue, saturation, value)
+        selectedColorBGRArray = cv2.cvtColor(hsvSelectedPixel, cv2.COLOR_HSV2BGR)[0, 0]
+        selectedColorBGR = (int(selectedColorBGRArray[0]), int(selectedColorBGRArray[1]), int(selectedColorBGRArray[2]))
 
-        # TODO Convert to HSV
-        hsv = "TODO: replace this with the conversion code"
+        # Convert to HSV
+        hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-        # TODO Create a bitwise mask
+        # Create a bitwise mask
+        mask = cv2.inRange(hsv, lower_blue, upper_blue)
+        
+        # Apply mask
+        masked_img = cv2.bitwise_and(img, img, mask=mask)
 
-        # TODO Apply mask
+        # Show the original image with drawings in one window
+        img = cv2.circle(img, (width - 50, height - 50), 30, selectedColorBGR, -1)
+        img = cv2.putText(img, "H = " + str(hue), (width - 200, height - 75), font, font_size_smaller, selectedColorBGR, thinner)
+        img = cv2.putText(img, "S = " + str(saturation), (width - 200, height - 50), font, font_size_smaller, selectedColorBGR, thinner)
+        img = cv2.putText(img, "V = " + str(value), (width - 200, height - 25), font, font_size_smaller, selectedColorBGR, thinner)
+        cv2.imshow(originalImageTitle, img)
 
-        # TODO Show the original image with drawings in one window
+        #  Show the masked image in another window
+        cv2.imshow(maskedImageTitle, masked_img)
 
-        # TODO Show the masked image in another window
+        # Show the mask image in another window
+        cv2.imshow(maskImageTitle, mask)
 
-        # TODO Show the mask image in another window
+        # Deal with keyboard input
 
-        # TODO Deal with keyboard input
-
+        # Press q to close the window
+        key = cv2.waitKey(10)
+        if key == ord("q"):
+            break
+        if key == ord("h"):
+            hue -= 1
+        if key == ord("H"):
+            hue += 1
+        if key == ord("s"):
+            saturation -= 1
+        if key == ord("S"):
+            saturation += 1
+        if key == ord("v"):
+            value -= 1
+        if key == ord("V"):
+            value += 1
     else:
         print("Could not start video camera")
         break
